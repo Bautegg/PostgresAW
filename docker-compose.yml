@@ -1,0 +1,34 @@
+# add common folder for container and host
+#remove env_file and change postgres.env na env -> check if it works with fresh container and volume
+
+services:
+  postgres:
+    # env_file: postgres.env
+    build: ./
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: postgres
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    # env_file: postgres.env
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container_aw
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: 8001
+    ports:
+      - "8001:8001"
+    volumes:
+      - local_pg4data:${LOCAL_PATH}
+    depends_on:
+      - postgres
+
+volumes:
+  local_pgdata:
+  local_pg4data:
