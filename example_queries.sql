@@ -6,7 +6,7 @@ group by territoryid, customerid, order_year
 having count(*) > 3
 order by territoryid, order_year
 
---find average unit price for each salesorderid
+--find average unit price for each salesorderid and difference between unit price and average unit price
 with cte as(
 select salesorderid, unitprice,
 avg(unitprice) over(partition by salesorderid) as avg_up
