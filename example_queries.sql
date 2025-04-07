@@ -6,7 +6,7 @@ group by territoryid, customerid, order_year
 having count(*) > 3
 order by territoryid, order_year
 
-
+--find average unit price for each salesorderid
 with cte as(
 select salesorderid, unitprice,
 avg(unitprice) over(partition by salesorderid) as avg_up
@@ -15,7 +15,7 @@ from sales.salesorderdetail)
 select salesorderid, unitprice, avg_up, unitprice - avg_up as up_diff
 from cte
 
-
+--join tables salesorderdetail and salesorderheader
 select *
 from sales.salesorderdetail as a
 left join sales.salesorderheader as b on b.salesorderid=a.salesorderid
@@ -30,3 +30,11 @@ select salesorderid, max(row_num) as max_row
 from cte
 group by salesorderid
 order by max_row desc
+
+--find the biggest currency rate for Australian Dolar in each year
+select tocurrencycode
+, max(endofdayrate)
+, extract('year' from modifieddate) as mod_year
+from sales.currencyrate
+where tocurrencycode='AUD'
+group by fromcurrencycode, tocurrencycode, mod_year
