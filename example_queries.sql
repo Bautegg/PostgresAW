@@ -33,8 +33,9 @@ order by max_row desc
 
 --find the biggest currency rate for Australian Dolar in each year
 select tocurrencycode
-, max(endofdayrate)
 , extract('year' from modifieddate) as mod_year
+, max(endofdayrate) as max_currency_rate
 from sales.currencyrate
 where tocurrencycode='AUD'
-group by fromcurrencycode, tocurrencycode, mod_year
+group by tocurrencycode, mod_year
+order by tocurrencycode, mod_year
